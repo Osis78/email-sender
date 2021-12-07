@@ -43,14 +43,14 @@ dd {
     width: 100%;
 }
 
-.emailSettings > label {
+label {
     padding: 16px 0 8px 0;
     
     font-weight: 700;
     line-height: calc(16px *1.2);
 }
 
-.emailSettings > dd > input[type=text], input[type=password] {
+input[type=text], input[type=password] {
     width: 100%;
     box-sizing: border-box;
     padding: 8px 16px;
@@ -61,11 +61,15 @@ dd {
     outline: none;
 
     transition-property: border;
-    transition-duration: 150ms;
+    transition-duration: 150ms;    
 }
 
-.emailSettings > dd > input[type=text]:focus, input[type=password]:focus {
+input[type=text]:focus, input[type=password]:focus {
     border: solid 2px rgb(10, 95, 251);
+}
+
+.textInput--mod {
+    width: 200px !important;
 }
 
 input[type=submit] {
@@ -100,6 +104,35 @@ input[type=submit]:active {
     color: rgb(246,246,246);
 }
 
+.buttonInput--mod {
+    margin: 0 !important;
+    padding: 8px 16px !important;
+    border: none;
+    border-radius: 3px;
+
+    outline: none;
+}
+
+select {
+    /*width: 200px;*/
+    text-align: center;
+
+    box-sizing: border-box;
+    padding: 8px 16px;
+
+    border: 2px solid #ecf0f1;
+    border-radius: 3px;
+
+    outline: none;
+
+    transition-property: border;
+    transition-duration: 150ms;
+}
+
+select:focus {
+    border: solid 2px rgb(10, 95, 251);
+}
+
 /* Page Layout */
 
 
@@ -109,13 +142,19 @@ input[type=submit]:active {
     padding: 0 0 16px 0;
 }
 
-/* Form */
+/* Forms */
 
-.emailSettings {
+.emailSettings, .authSettings {
     display: flex;
     flex-flow: column wrap;
 
     padding: 0 0 32px 0;
+}
+
+
+
+.required_field {
+    color: rgb(221, 72, 72);
 }
 
 /* Text editor */

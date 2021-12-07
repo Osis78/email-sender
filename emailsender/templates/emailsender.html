@@ -21,28 +21,50 @@
             {% from "_formhelpers.html" import render_field %}
             <form method=post class="emailForm">
                 <dl class="emailSettings">
-                    <label for="sender">Adresse de l'expéditeur</label>
-                    {{ render_field(form.email, class="sender", value="paul.vergnaud.pro@gmail.com") }}
-                    <label for="password">Mot de passe de l'expéditeur</label>
-                    {{ render_field(form.password, class="password", value="oruznicrjubsqojw") }}
-                    <label for="displayName">Nom de l'expéditeur</label>
-                    {{ render_field(form.name, class="displayName", value="Paul Vergnaud") }}
-                    <label for="emailList">Fichier de contacts (.csv)</label>
-                    {{ render_field(form.file, class="emailList") }}
-                    <label for="subject">Objet du mail</label>
-                    {{ render_field(form.subject, class="subject", value="Test") }}
+                    <label for="displayName">Nom de l'expéditeur<span class="required_field">*</span></label>
+                    {{ render_field(form.name, class="displayName", value="") }}
+                    <label for="subject">Objet du mail<span class="required_field">*</span></label>
+                    {{ render_field(form.subject, class="subject", value="") }}
+                    <label for="filters">Filtres</label>
+                    {{ render_field(form.filters, id="filters", class="filters", value="") }}
+                    <div class="filtering_container" id="filtering_container">
+                        <div class="filtering">
+                            <select name="filtering_fields" id="filtering_fields">
+                                <!-- Trouver comment générer les options contenant les fields -->
+                                {%for filter in filters%}
+                                <option for="filtering_fields">{{filter}}</option>
+                                {%endfor%}
+                            </select>
+                            <select name="filtering_operators" id="filtering_operators">
+                                <option value="<"><</option>
+                                <option value=">">></option>
+                                <option value="<="><=</option>
+                                <option value=">=">>=</option>
+                                <option value="=">=</option>
+                                <option value="in">contient</option>
+                                <option value="notin">ne contient pas</option>
+                                <option value="startswith">commence par</option>
+                                <option value="endswith">se termine par</option>
+                                <option value="notstartswith">ne commence pas par</option>
+                                <option value="notendswith">ne se termine pas par</option>
+                            </select>
+                            <input type="text" class="textInput--mod">
+                            <input type="button" value="Appliquer" class="buttonInput--mod">
+                        </div>
+                        <input type="button" value="Ajouter un filtre" class="buttonInput--mod">
+                    </div>
                     <!--<label for="contentBgColor" id="">Couleur de fond</label>
                     <input type="color" id="contentBgColor" value="#fefefe">-->
                     <label for="content" id="content_title">Corps du mail</label>
                     {{ render_field(form.content, class="content", id="content") }}
                 </dl>
-                <h2 class="editorTitle">Corps du mail</h2>
+                <h2 class="editorTitle">Corps du mail<span class="required_field">*</span></h2>
                 <div class="emailContent" id="emailContent"></div>
                 <input type=submit value="Envoyer">
             </form>
         </div>
-        <div class="footer"></div>
     </div>
+    <div class="footer"></div>
     
     <!-- Load jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -59,6 +81,6 @@
     <script src="{{ url_for('static', filename='plugins/Trumbowyg-main/dist/plugins/pasteimage/trumbowyg.pasteimage.min.js') }}"></script>
     <script src="{{ url_for('static', filename='plugins/Trumbowyg-main/dist/plugins/upload/trumbowyg.upload.min.js') }}"></script>
     <!-- Load custom JS -->
-    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/emailsender.js') }}"></script>
 </body>
 </html>

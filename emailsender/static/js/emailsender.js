@@ -7,6 +7,7 @@ $( document ).ready(function() {
     editor.css('background-color', selectedColor);
     $('#content_title').css('display', 'none');
     $('#content').css('display', 'none');
+    $('#filters').css('display', 'none');
 
     $('#emailContent').trumbowyg({
         lang: 'fr',
