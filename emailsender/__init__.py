@@ -1,10 +1,12 @@
-import os
+import os, sys
 
 from flask import Flask, request, render_template, redirect
 #from werkzeug.utils import secure_filename
 from wtforms import Form, StringField, PasswordField, validators
 
 from emailsender import functions, db
+
+UPLOADS_FOLDER = 'uploads/'
 
 class authForm(Form):
     email = StringField('', [
@@ -64,10 +66,11 @@ def create_app(test_config=None):
     def email_sender():
         user_params = functions.get_user_params(0)
         form = EmailForm(request.form)
-        filters = functions.get_fields(user_params[2])
+        filters = functions.get_fields(UPLOADS_FOLDER+user_params[2])
+        editorVars = functions.get_fields(UPLOADS_FOLDER+user_params[2])
         if request.method == 'POST' and form.validate():
-            functions.send_email(user_params[2], user_params[0], user_params[1], form.name.data, form.subject.data, form.content.data, user_params[3])
-        return render_template('emailsender.html', form=form, filters=filters)
+            functions.send_email(UPLOADS_FOLDER+user_params[2], user_params[0], user_params[1], form.name.data, form.subject.data, form.content.data, user_params[3], form.filters.data)
+        return render_template('emailsender.html', form=form, filters=filters, editorVars=editorVars)
 
     db.init_app(app)
 

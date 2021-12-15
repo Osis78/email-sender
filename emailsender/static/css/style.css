@@ -50,6 +50,17 @@ label {
     line-height: calc(16px *1.2);
 }
 
+input:disabled, input:disabled:hover {
+    background-color: #ecf0f1;
+    color: #979a9b;
+    border-color: #ecf0f1;
+    cursor:unset;
+}
+
+input, select {
+    background-color: #FEFEFE;
+}
+
 input[type=text], input[type=password] {
     width: 100%;
     box-sizing: border-box;
@@ -107,14 +118,40 @@ input[type=submit]:active {
 .buttonInput--mod {
     margin: 0 !important;
     padding: 8px 16px !important;
-    border: none;
+    /*color:rgb(10, 95, 251);*/;
+    border: solid 2px #fb0a5f;
+    font-weight: bold;
     border-radius: 3px;
-
+    color: #FEFEFE;
+    background-color: #fb0a5f;
     outline: none;
+    cursor: pointer;
+
+    transition-property: transform;
+    transition-duration: 250ms;
+}
+
+.buttonInput--mod:hover {
+    background-color: #FEFEFE;
+    color: #fb0a5f;
+}
+
+.buttonInput--mod:active {
+    transform: scale(.9);
+}
+
+.buttonAlt {
+    background-color: rgb(10,95,251);
+    border-color: rgb(10,95,251);
+}
+
+.buttonAlt:hover {
+    color: rgb(10,95,251);
 }
 
 select {
     /*width: 200px;*/
+    max-height: 35px;
     text-align: center;
 
     box-sizing: border-box;
@@ -151,10 +188,20 @@ select:focus {
     padding: 0 0 32px 0;
 }
 
-
-
 .required_field {
-    color: rgb(221, 72, 72);
+    color: #fb0a5f;
+}
+
+.filtering {
+    padding: 8px 0 0 0;
+}
+
+.filters {
+    margin: 0 0 8px 0;
+}
+
+.filtering__actions {
+    padding: 16px 0 0 0;
 }
 
 /* Text editor */
@@ -164,5 +211,9 @@ select:focus {
 }
 
 .emailContent {
-    /*max-width: 500px;*/
+    background-color: #FEFEFE;
+}
+
+.editorVars {
+    padding: 0 0 8px 0; 
 }

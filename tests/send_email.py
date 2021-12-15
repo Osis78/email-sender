@@ -3,6 +3,24 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from itertools import chain, zip_longest
 
+uploads_folder = ''
+
+contacts_file = uploads_folder+''
+sender_email = ''
+password = ''
+sender_name = ''
+email_subject = ''
+email_content = '!'
+email_client = ''
+filters = ''
+
+def get_fields(contacts_file):
+    with open(contacts_file, 'r') as csvfile:
+        csvreader = csv.reader(csvfile, delimiter=';')
+        fields = next(csvreader)
+    
+    return fields
+
 def send_email(contacts_file, sender_email, password, sender_name, email_subject, email_content, email_client, filters):
 
     # Get contacts
@@ -96,20 +114,8 @@ def send_email(contacts_file, sender_email, password, sender_name, email_subject
             #message.attach(part1)
             message.attach(part2)
             context = ssl.create_default_context()
-            with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-                server.login(sender_email, password)
-                server.sendmail(sender_email, receiver_email, message.as_string())
+            #with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+            #    server.login(sender_email, password)
+            #    server.sendmail(sender_email, receiver_email, message.as_string())
 
-def get_fields(contacts_file):
-    with open(contacts_file, 'r') as csvfile:
-        csvreader = csv.reader(csvfile, delimiter=';')
-        fields = next(csvreader)
-    
-    return fields
-
-def get_user_params(user_id):
-    email = ''
-    password = ''
-    filepath = ''
-    email_client = ''
-    return [email, password, filepath, email_client]
+send_email(contacts_file, sender_email, password, sender_name, email_subject, email_content, email_client, filters)

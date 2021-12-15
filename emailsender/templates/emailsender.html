@@ -25,33 +25,40 @@
                     {{ render_field(form.name, class="displayName", value="") }}
                     <label for="subject">Objet du mail<span class="required_field">*</span></label>
                     {{ render_field(form.subject, class="subject", value="") }}
-                    <label for="filters">Filtres</label>
-                    {{ render_field(form.filters, id="filters", class="filters", value="") }}
+                    <div class="filtering__actions">
+                        <label for="filters">Filtres</label>
+                            {{ render_field(form.filters, id="filters", class="filters", value="") }}
+                            <input type="button" value="Retirer" class="buttonInput--mod" id="remove_filter">
+                        </div>
                     <div class="filtering_container" id="filtering_container">
                         <div class="filtering">
-                            <select name="filtering_fields" id="filtering_fields">
+                            <select name="filtering_fields" id="filtering_fields" class="filtering_fields">
                                 <!-- Trouver comment générer les options contenant les fields -->
                                 {%for filter in filters%}
                                 <option for="filtering_fields">{{filter}}</option>
                                 {%endfor%}
                             </select>
-                            <select name="filtering_operators" id="filtering_operators">
+                            <select name="filtering_operators" class="filtering_operators" id="filtering_operators">
                                 <option value="<"><</option>
                                 <option value=">">></option>
                                 <option value="<="><=</option>
                                 <option value=">=">>=</option>
                                 <option value="=">=</option>
-                                <option value="in">contient</option>
-                                <option value="notin">ne contient pas</option>
-                                <option value="startswith">commence par</option>
-                                <option value="endswith">se termine par</option>
-                                <option value="notstartswith">ne commence pas par</option>
-                                <option value="notendswith">ne se termine pas par</option>
+                                <option value="!=">!=</option>
+                                <option value="contient">contient</option>
+                                <option value="ne contient pas">ne contient pas</option>
+                                <option value="commence par">commence par</option>
+                                <option value="se termine par">se termine par</option>
+                                <option value="ne commence pas par">ne commence pas par</option>
+                                <option value="ne se termine pas par">ne se termine pas par</option>
                             </select>
-                            <input type="text" class="textInput--mod">
-                            <input type="button" value="Appliquer" class="buttonInput--mod">
+                            <input type="text" class="textInput--mod" id="filtering_condition">
+                            <input type="button" value="Appliquer" class="buttonInput--mod buttonAlt" id="apply_filter">
+                            <input type="button" value="et" class="buttonInput--mod" id="and_condition">
+                            <input type="button" value="ou" class="buttonInput--mod" id="or_condition">
+                            <!--<input type="button" value="(" class="buttonInput--mod" id="left_parenthesis">
+                            <input type="button" value=")" class="buttonInput--mod" id="right_parenthesis">-->
                         </div>
-                        <input type="button" value="Ajouter un filtre" class="buttonInput--mod">
                     </div>
                     <!--<label for="contentBgColor" id="">Couleur de fond</label>
                     <input type="color" id="contentBgColor" value="#fefefe">-->
@@ -60,7 +67,7 @@
                 </dl>
                 <h2 class="editorTitle">Corps du mail<span class="required_field">*</span></h2>
                 <div class="emailContent" id="emailContent"></div>
-                <input type=submit value="Envoyer">
+                <input type=submit value="Envoyer" id="main_submit_bt">
             </form>
         </div>
     </div>
