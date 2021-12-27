@@ -1,16 +1,17 @@
+from os import replace
 import smtplib, ssl, csv, re, unicodedata, sys
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from itertools import chain, zip_longest
 
-uploads_folder = ''
+uploads_folder = '../uploads/'
 
 contacts_file = uploads_folder+''
 sender_email = ''
 password = ''
 sender_name = ''
 email_subject = ''
-email_content = '!'
+email_content = ''
 email_client = ''
 filters = ''
 
@@ -27,6 +28,14 @@ def send_email(contacts_file, sender_email, password, sender_name, email_subject
     contacts = []
     with open(contacts_file, "r") as csvfile:
         csvreader = csv.reader(csvfile, delimiter=';')
+        fields = get_fields(contacts_file)
+
+        # Get liquid vars
+        liquidVars = re.findall('{{(.*?)}}', email_content)
+        liquidVarsDict = {}
+        for i, field in enumerate(fields):
+            if field in liquidVars:
+                liquidVarsDict[field] = i
 
         if filters:
             filters = str(filters)
@@ -37,7 +46,6 @@ def send_email(contacts_file, sender_email, password, sender_name, email_subject
             query_without_operators = [x for i, x in enumerate(query) if i % 2 == 0]
 
             fields_in_query = [x for i, x in enumerate(query_without_operators) if i % 2 == 0]
-            fields = get_fields(contacts_file)
             fields_position = dict()
             for i, field in enumerate(fields):
                 if field in fields_in_query:
@@ -101,21 +109,24 @@ def send_email(contacts_file, sender_email, password, sender_name, email_subject
         smtp_server = 'smtp.gmail.com'
 
     for index, contact in enumerate(contacts):
-        if index == 0:
-            receiver_email = contact[2] # En fonction du fichier
-            message = MIMEMultipart("alternative")
-            message['Subject'] = email_subject
-            message['From'] = sender_email
-            message['To'] = receiver_email
-            #text = ''
-            html = email_content
-            #part1 = MIMEText(text, "plain")
-            part2 = MIMEText(html, "html")
-            #message.attach(part1)
-            message.attach(part2)
-            context = ssl.create_default_context()
-            #with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-            #    server.login(sender_email, password)
-            #    server.sendmail(sender_email, receiver_email, message.as_string())
+        #Insert liquid vars instead of field names
+        if liquidVars:
+            for liquidVar in liquidVarsDict:
+                email_content = email_content.replace("{{" + liquidVar + "}}", contact[liquidVarsDict[liquidVar]])
+        receiver_email = contact[2] # En fonction du fichier
+        message = MIMEMultipart("alternative")
+        message['Subject'] = email_subject
+        message['From'] = sender_email
+        message['To'] = receiver_email
+        #text = ''
+        html = email_content
+        #part1 = MIMEText(text, "plain")
+        part2 = MIMEText(html, "html")
+        #message.attach(part1)
+        message.attach(part2)
+        context = ssl.create_default_context()
+        #with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+        #    server.login(sender_email, password)
+        #    server.sendmail(sender_email, receiver_email, message.as_string())
 
 send_email(contacts_file, sender_email, password, sender_name, email_subject, email_content, email_client, filters)

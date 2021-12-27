@@ -66,6 +66,14 @@
                     {{ render_field(form.content, class="content", id="content") }}
                 </dl>
                 <h2 class="editorTitle">Corps du mail<span class="required_field">*</span></h2>
+                <div class="editorVars" id="editorVars">
+                    <select name="liquidVars" id="liquidVars" class="liquidVars">
+                        {%for editorVar in editorVars%}
+                        <option for="liquidVars" value="{{editorVar}}">{{editorVar}}</option>
+                        {%endfor%}
+                    </select>
+                    <input type="button" value="Ajouter la variable" id="addVar" class="buttonAlt buttonInput--mod">
+                </div>
                 <div class="emailContent" id="emailContent"></div>
                 <input type=submit value="Envoyer" id="main_submit_bt">
             </form>
