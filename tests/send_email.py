@@ -6,7 +6,7 @@ from itertools import chain, zip_longest
 
 uploads_folder = '../uploads/'
 
-contacts_file = uploads_folder+''
+contacts_file = uploads_folder+'test.csv'
 sender_email = ''
 password = ''
 sender_name = ''
@@ -111,15 +111,21 @@ def send_email(contacts_file, sender_email, password, sender_name, email_subject
     for index, contact in enumerate(contacts):
         #Insert liquid vars instead of field names
         if liquidVars:
-            for liquidVar in liquidVarsDict:
-                email_content = email_content.replace("{{" + liquidVar + "}}", contact[liquidVarsDict[liquidVar]])
+            temp_email_content = email_content
+            for index, liquidVar in enumerate(liquidVarsDict):
+                if index == 0:
+                    new_email_content = temp_email_content.replace("{{" + liquidVar + "}}", contact[liquidVarsDict[liquidVar]])
+                else:
+                    temp_email_content = new_email_content
+                    new_email_content = temp_email_content.replace("{{" + liquidVar + "}}", contact[liquidVarsDict[liquidVar]])
+        
         receiver_email = contact[2] # En fonction du fichier
         message = MIMEMultipart("alternative")
         message['Subject'] = email_subject
         message['From'] = sender_email
         message['To'] = receiver_email
         #text = ''
-        html = email_content
+        html = new_email_content
         #part1 = MIMEText(text, "plain")
         part2 = MIMEText(html, "html")
         #message.attach(part1)

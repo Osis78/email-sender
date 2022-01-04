@@ -69,7 +69,7 @@ def create_app(test_config=None):
         filters = functions.get_fields(UPLOADS_FOLDER+user_params[2])
         editorVars = functions.get_fields(UPLOADS_FOLDER+user_params[2])
         if request.method == 'POST' and form.validate():
-            functions.send_email(UPLOADS_FOLDER+user_params[2], user_params[0], user_params[1], form.name.data, form.subject.data, form.content.data, user_params[3], form.filters.data)
+            functions.send_email(UPLOADS_FOLDER+user_params[2], user_params[0], user_params[1], form.name.data, form.subject.data, form.content.data, form.filters.data)
         return render_template('emailsender.html', form=form, filters=filters, editorVars=editorVars)
 
     db.init_app(app)
