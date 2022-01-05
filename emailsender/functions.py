@@ -82,18 +82,14 @@ def send_email(contacts_file, sender_email, password, sender_name, email_subject
 
     # Host configuration (Vérifier le serveur de messagerie après le @) (si custom, voir comment faire)
     port = 465
-    smtp_server = 'smtp.gmail.com'
+    smtp_server = ''
 
-    for index, row in enumerate(contacts):
+    for row in contacts:
         #Insert liquid vars instead of field names
+        new_email_content = email_content
         if liquidVars:
-            temp_email_content = email_content
-            for index, liquidVar in enumerate(liquidVarsDict):
-                if index == 0:
-                    new_email_content = temp_email_content.replace("{{" + liquidVar + "}}", row[liquidVarsDict[liquidVar]])
-                else:
-                    temp_email_content = new_email_content
-                    new_email_content = temp_email_content.replace("{{" + liquidVar + "}}", row[liquidVarsDict[liquidVar]])
+            for liquidVar in liquidVarsDict:
+                new_email_content = new_email_content.replace("{{" + liquidVar + "}}", row[liquidVarsDict[liquidVar]])
                     
         receiver_email = row[2] # En fonction du fichier
         message = MIMEMultipart("alternative")
