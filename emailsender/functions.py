@@ -1,21 +1,39 @@
-import smtplib, ssl, csv, re, unicodedata, sys
+import smtplib, ssl, csv, re
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from itertools import chain, zip_longest
 
-def send_email(contacts_file, sender_email, password, sender_name, email_subject, email_content, filters):
+from emailsender.models import Campaign
+
+def save_campaign(campaign_name, sender, subject, content, a_envoyer, filters, contacts, is_sent, user_id, update=False, campaign_id=None):
+    if update == False:
+        campaign = Campaign(name=campaign_name, sender=sender, subject=subject, content=content, a_envoyer=a_envoyer, filters=filters, contacts=contacts, sent=is_sent, user_id=user_id)
+    if update == True and campaign_id != None:
+        campaign = Campaign.query.filter_by(id=campaign_id).first()
+        campaign.name = campaign_name
+        campaign.sender = sender
+        campaign.subject = subject
+        campaign.content = content
+        campaign.a_envoyer = a_envoyer
+        campaign.filters = filters
+        campaign.contacts = contacts
+        campaign.sent = is_sent
+    return campaign
+
+def send_email(contacts_file, sender_email, password, sender_name, email_subject, email_content, filters, get_only_contacts=False):
     # Get contacts
     contacts = []
     with open(contacts_file, "r") as csvfile:
         csvreader = csv.reader(csvfile, delimiter=';')
         fields = get_fields(contacts_file)
 
-        # Get liquid vars
-        liquidVars = re.findall('{{(.*?)}}', email_content)
-        liquidVarsDict = {}
-        for i, field in enumerate(fields):
-            if field in liquidVars:
-                liquidVarsDict[field] = i
+        if get_only_contacts == False:
+            # Get liquid vars
+            liquidVars = re.findall('{{(.*?)}}', email_content)
+            liquidVarsDict = {}
+            for i, field in enumerate(fields):
+                if field in liquidVars:
+                    liquidVarsDict[field] = i
 
         if filters:
             filters = str(filters)
@@ -80,9 +98,15 @@ def send_email(contacts_file, sender_email, password, sender_name, email_subject
                 if i > 0:
                     contacts.append(row)
 
-    # Host configuration (Vérifier le serveur de messagerie après le @) (si custom, voir comment faire)
+    if get_only_contacts == True:
+        display_contacts = []
+        for contact in contacts:
+            display_contacts.append(contact[2])
+        return display_contacts
+
+    # Host configuration
     port = 465
-    smtp_server = ''
+    smtp_server = 'authsmtp.securemail.pro'
 
     for row in contacts:
         #Insert liquid vars instead of field names
@@ -113,9 +137,3 @@ def get_fields(contacts_file):
         fields = next(csvreader)
     
     return fields
-
-def get_user_params(user_id):
-    email = ''
-    password = ''
-    filepath = ''
-    return [email, password, filepath]

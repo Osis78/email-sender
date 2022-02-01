@@ -1,4 +1,5 @@
 from os import replace
+import time, datetime
 import smtplib, ssl, csv, re, unicodedata, sys
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -128,4 +129,4 @@ def send_email(contacts_file, sender_email, password, sender_name, email_subject
         #    server.login(sender_email, password)
         #    server.sendmail(sender_email, receiver_email, message.as_string())
 
-send_email(contacts_file, sender_email, password, sender_name, email_subject, email_content, email_client, filters)
+#send_email(contacts_file, sender_email, password, sender_name, email_subject, email_content, email_client, filters)

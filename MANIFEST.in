@@ -1,5 +1,0 @@
-include emailsender/schema.sql
-graft emailsender/static
-graft emailsender/templates
-graft tests
-global-exclude *.pyc

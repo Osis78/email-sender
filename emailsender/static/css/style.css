@@ -39,15 +39,27 @@ p {
     line-height: calc(16px * 1.2);
 }
 
+.menu {
+    padding: 32px 0;
+}
+
 dd {
     width: 100%;
 }
 
-label {
+.emailSettings > label, .emailForm > label, .authSettings > label, .filtering__actions > label {
     padding: 16px 0 8px 0;
     
     font-weight: 700;
     line-height: calc(16px *1.2);
+}
+
+strong {
+    font-weight: bold;
+}
+
+em {
+    font-style: italic;
 }
 
 input:disabled, input:disabled:hover {
@@ -61,7 +73,7 @@ input, select {
     background-color: #FEFEFE;
 }
 
-input[type=text], input[type=password] {
+input[type=text], input[type=password], .a_envoyer {
     width: 100%;
     box-sizing: border-box;
     padding: 8px 16px;
@@ -75,7 +87,7 @@ input[type=text], input[type=password] {
     transition-duration: 150ms;    
 }
 
-input[type=text]:focus, input[type=password]:focus {
+input[type=text]:focus, input[type=password]:focus, .a_envoyer:focus {
     border: solid 2px rgb(10, 95, 251);
 }
 
@@ -83,7 +95,7 @@ input[type=text]:focus, input[type=password]:focus {
     width: 200px !important;
 }
 
-input[type=submit] {
+input[type=submit], .save_bt {
     width: 100%;
 
     padding: 16px 64px;
@@ -97,20 +109,18 @@ input[type=submit] {
     background-color: rgb(10, 95, 251);
     color: rgb(246, 246, 246);
 
-    margin: 32px 0 0 0;
-
     font-size: 16px;
     font-weight: 700;
 
     transition-duration: 250ms;
 }
 
-input[type=submit]:hover {
+input[type=submit]:hover, .save_bt:hover {
     background-color: rgb(246, 246, 246);
     color: rgb(10, 95, 251);
 }
 
-input[type=submit]:active {
+input[type=submit]:active, .save_bt:active {
     background-color: rgb(10,95,251);
     color: rgb(246,246,246);
 }
@@ -193,15 +203,40 @@ select:focus {
 }
 
 .filtering {
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
     padding: 8px 0 0 0;
 }
 
+.filteringLeft {
+    padding: 0 24px 8px 0;
+}
+
 .filters {
-    margin: 0 0 8px 0;
+    margin: 8px 0 8px 0;
 }
 
 .filtering__actions {
     padding: 16px 0 0 0;
+}
+
+.send_options {
+    padding: 32px 0 32px 0;
+}
+
+.save_bt {
+    margin: 0 0 16px 0;
+}
+
+.flashes {
+    background-color: #fb0a5e50;
+    border-radius: 3px;
+    padding: 8px;
+}
+
+.flashes > li {
+    color: #fb0a5f;
 }
 
 /* Text editor */
@@ -216,4 +251,71 @@ select:focus {
 
 .editorVars {
     padding: 0 0 8px 0; 
+}
+
+/* Campagnes */
+
+.campaigns {
+    border-radius: 3px;
+}
+
+.campaignsList {
+    overflow-y: scroll;
+    max-height: 500px;
+    border-radius: 3px;
+}
+
+.headers, .campaignsList > li {
+    box-sizing: border-box;
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+}
+
+.headers {
+    padding: 24px 16px;
+    background-color: rgb(10, 95, 251);
+    color: rgb(246, 246, 246);
+}
+
+.campaignsList > li:nth-child(2n) {
+    background-color: rgb(206, 217, 240);
+}
+
+.campaignsList > li > div, .headers > div {
+    width: 20%;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.actions > input {
+    width: 100px;
+}
+
+/* Confirm.html */
+
+.campaignInfos {
+    padding: 0 0 32px;
+}
+
+.campaignInfos > h3 {
+    padding: 0 0 8px 0;
+}
+
+.campaignInfos > p {
+    padding: 0 0 18px 0;
+}
+
+.contactsList {
+    max-height: 160px;
+    max-width: 300px;
+    padding: 8px; 
+    overflow-y: scroll;
+}
+
+.contactsList > li {
+    padding: 8px 0;
 }

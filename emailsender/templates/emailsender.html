@@ -1,63 +1,76 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A simple email sender">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/Trumbowyg-main/dist/ui/trumbowyg.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/Trumbowyg-main/dist/plugins/colors/ui/trumbowyg.colors.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/Trumbowyg-main/dist/plugins/emoji/ui/trumbowyg.emoji.min.css') }}">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='plugins/Trumbowyg-main/dist/ui/trumbowyg.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='plugins/Trumbowyg-main/dist/plugins/colors/ui/trumbowyg.colors.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='plugins/Trumbowyg-main/dist/plugins/emoji/ui/trumbowyg.emoji.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='plugins/datetimepicker-master/jquery.datetimepicker.css') }}"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Email Sender</title>
 </head>
 <body>
     <div class="app">
         <div class="header">
+            <div class="menu">
+                <a href="{{ url_for('index') }}">Accueil</a>
+                <a href="{{ url_for('campaigns') }}">Campagnes</a>
+                <a href="{{ url_for('logout') }}">Se déconnecter</a>
+            </div>
             <h1 class="pageTitle">Campagne emailing</h1>
         </div>
         <div class="main">
             {% from "_formhelpers.html" import render_field %}
-            <form method=post class="emailForm">
+            <form method="post" class="emailForm" id="emailForm">
                 <dl class="emailSettings">
+                    <label for="campaignName">Nom de la campagne<span class="required_field">*</span></label>
+                    {{ render_field(form.name, class="campaignName") }}
                     <label for="displayName">Nom de l'expéditeur<span class="required_field">*</span></label>
-                    {{ render_field(form.name, class="displayName", value="") }}
+                    {{ render_field(form.sender, class="displayName") }}
                     <label for="subject">Objet du mail<span class="required_field">*</span></label>
-                    {{ render_field(form.subject, class="subject", value="") }}
+                    {{ render_field(form.subject, class="subject") }}
+                    <label for="a_envoyer">Prévoir l'envoi</label>
+                    {{ render_field(form.a_envoyer, class="a_envoyer", id="datetimepicker", type="text") }}
                     <div class="filtering__actions">
                         <label for="filters">Filtres</label>
-                            {{ render_field(form.filters, id="filters", class="filters", value="") }}
+                            {{ render_field(form.filters, id="filters", class="filters") }}
                             <input type="button" value="Retirer" class="buttonInput--mod" id="remove_filter">
                         </div>
                     <div class="filtering_container" id="filtering_container">
                         <div class="filtering">
-                            <select name="filtering_fields" id="filtering_fields" class="filtering_fields">
-                                <!-- Trouver comment générer les options contenant les fields -->
-                                {%for filter in filters%}
-                                <option for="filtering_fields">{{filter}}</option>
-                                {%endfor%}
-                            </select>
-                            <select name="filtering_operators" class="filtering_operators" id="filtering_operators">
-                                <option value="<"><</option>
-                                <option value=">">></option>
-                                <option value="<="><=</option>
-                                <option value=">=">>=</option>
-                                <option value="=">=</option>
-                                <option value="!=">!=</option>
-                                <option value="contient">contient</option>
-                                <option value="ne contient pas">ne contient pas</option>
-                                <option value="commence par">commence par</option>
-                                <option value="se termine par">se termine par</option>
-                                <option value="ne commence pas par">ne commence pas par</option>
-                                <option value="ne se termine pas par">ne se termine pas par</option>
-                            </select>
-                            <input type="text" class="textInput--mod" id="filtering_condition">
-                            <input type="button" value="Appliquer" class="buttonInput--mod buttonAlt" id="apply_filter">
-                            <input type="button" value="et" class="buttonInput--mod" id="and_condition">
-                            <input type="button" value="ou" class="buttonInput--mod" id="or_condition">
-                            <!--<input type="button" value="(" class="buttonInput--mod" id="left_parenthesis">
-                            <input type="button" value=")" class="buttonInput--mod" id="right_parenthesis">-->
+                            <div class="filteringLeft">
+                                <select name="filtering_fields" id="filtering_fields" class="filtering_fields">
+                                    <!-- Trouver comment générer les options contenant les fields -->
+                                    {%for filter in filters%}
+                                    <option for="filtering_fields">{{filter}}</option>
+                                    {%endfor%}
+                                </select>
+                                <select name="filtering_operators" class="filtering_operators" id="filtering_operators">
+                                    <option value="<"><</option>
+                                    <option value=">">></option>
+                                    <option value="<="><=</option>
+                                    <option value=">=">>=</option>
+                                    <option value="=">=</option>
+                                    <option value="!=">!=</option>
+                                    <option value="contient">contient</option>
+                                    <option value="ne contient pas">ne contient pas</option>
+                                    <option value="commence par">commence par</option>
+                                    <option value="se termine par">se termine par</option>
+                                    <option value="ne commence pas par">ne commence pas par</option>
+                                    <option value="ne se termine pas par">ne se termine pas par</option>
+                                </select>
+                                <input type="text" class="textInput--mod" id="filtering_condition">
+                            </div>
+                            <div class="filteringRight">
+                                <input type="button" value="Appliquer" class="buttonInput--mod buttonAlt" id="apply_filter">
+                                <input type="button" value="et" class="buttonInput--mod" id="and_condition">
+                                <input type="button" value="ou" class="buttonInput--mod" id="or_condition">
+                                <!--<input type="button" value="(" class="buttonInput--mod" id="left_parenthesis">
+                                <input type="button" value=")" class="buttonInput--mod" id="right_parenthesis">-->
+                            </div>
                         </div>
                     </div>
                     <!--<label for="contentBgColor" id="">Couleur de fond</label>
@@ -75,7 +88,11 @@
                     <input type="button" value="Ajouter la variable" id="addVar" class="buttonAlt buttonInput--mod">
                 </div>
                 <div class="emailContent" id="emailContent"></div>
-                <input type=submit value="Envoyer" id="main_submit_bt">
+                <div class="send_options">
+                    <!--<input type="submit" name="action" value="Sauvegarder" id="save_bt" class="save_bt">-->
+                    <!--<input type=submit name="action" value="Etape suivante" id="main_submit_bt">-->
+                    <input type=submit value="Etape suivante" id="main_submit_bt">
+                </div>
             </form>
         </div>
     </div>
@@ -83,6 +100,8 @@
     
     <!-- Load jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- Load datetimepicker -->
+    <script src="{{ url_for('static', filename='plugins/datetimepicker-master/build/jquery.datetimepicker.full.min.js') }}"></script>
     <!-- Load Trumbowyg -->
     <script src="{{ url_for('static', filename='plugins/Trumbowyg-main/dist/trumbowyg.min.js') }}"></script>
     <!-- Load Trumbowyg plugins -->

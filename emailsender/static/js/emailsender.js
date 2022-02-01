@@ -16,10 +16,29 @@ $(document).ready(function() {
         filters.val("");
     }
 
+    function timestamp_to_date(timestamp) {
+        // Create a new JavaScript Date object based on the timestamp
+        let date = new Date(timestamp * 1000);
+        let day = date.getDate();
+        let month = date.getMonth() + 1;
+        let year = date.getFullYear();
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+        // Will display time in 10:30 format
+        let formattedTime = day + '/' + "0" + month + '/' + year + ' ' + hours + ':' + minutes;
+
+        return formattedTime.toString();
+    }
+
+    let emailForm = $('#emailForm');
+    let submit_bt = $('#main_submit_bt');
+    let save_bt = $('#save_bt');
+
     let editor = $('#emailContent');
     let editorHTML;
     //let selectedColor = $('#contentBgColor').val();
 
+    let content = $('#content');
     let apply_filter_bt = $('#apply_filter');
     let remove_filter_bt = $('#remove_filter');
     let filters = $('#filters');
@@ -29,15 +48,20 @@ $(document).ready(function() {
     let and_condition = $('#and_condition');
     let or_condition = $('#or_condition');
     let addVar = $('#addVar');
+    let a_envoyer = $('#datetimepicker');
     //let left_parenthesis = $('#left_parenthesis');
     //let right_parenthesis = $('#right_parenthesis');
 
     //let add_var_bt = $('#add_var');
-
+    
     //editor.css('background-color', selectedColor);
     $('#content_title').css('display', 'none');
-    $('#content').css('display', 'none');
+    content.css('display', 'none');
     //$('#filters').attr('disabled', true);
+    
+    $('#datetimepicker').datetimepicker({
+        format:'d/m/Y H:i'
+    });
 
     $('#emailContent').trumbowyg({
         lang: 'fr',
@@ -58,7 +82,6 @@ $(document).ready(function() {
             ['fontfamily'],
             ['fontsize'],
             ['strong', 'em', 'del'],
-            ['superscript', 'subscript'],
             ['foreColor', 'backColor'],
             ['link'],
             ['emoji'],
@@ -93,7 +116,7 @@ $(document).ready(function() {
             }
         }
     }).on('tbwinit', () => {
-        //$('#emailContent').trumbowyg('html', '<div>Test</div>');
+        $('#emailContent').trumbowyg('html', content.val());
     }).on('tbwchange', () => {
         // Get html content in the editor
         editorHTML = $('#emailContent').html();
@@ -126,4 +149,5 @@ $(document).ready(function() {
     addVar.on('click', () => {
         editor.append('{{' + $('#liquidVars').val() + '}}');
     });
+
 });

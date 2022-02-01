@@ -4,22 +4,27 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A simple email sender">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <title>Compte</title>
+    <title>Campagnes</title>
 </head>
 <body>
     <div class="app">
         <div class="header">
-            <h1 class="pageTitle">Compte</h1>
+            <div class="menu">
+                <a href="{{ url_for('index') }}">Accueil</a>
+                <a href="{{ url_for('campaigns') }}">Campagnes</a>
+                <a href="{{ url_for('logout') }}">Se déconnecter</a>
+            </div>
+            <h1 class="pageTitle">Accueil</h1>
+        </div>
+        <div class="main">
+            <input type="button" value="Créer une campagne d'emailing" id="newCampaign">
         </div>
     </div>
-    <div class="footer"></div>
-    
     <!-- Load jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <!-- Load custom JS -->
-    <script src="{{ url_for('static', filename='js/account.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 </body>
 </html>

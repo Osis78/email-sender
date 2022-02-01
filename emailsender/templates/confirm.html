@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Récapitulatif</title>
+</head>
+<body>
+    <div class="app">
+        <div class="header">
+            <div class="menu">
+                <a href="{{ url_for('index') }}">Accueil</a>
+                <a href="{{ url_for('campaigns') }}">Campagnes</a>
+                <a href="{{ url_for('logout') }}">Se déconnecter</a>
+            </div>
+            <h1 class="pageTitle">Récapitulatif de la campagne</h1>
+        </div>
+        <div class="main">
+            <div class="campaignInfos">
+                <h3>Nom de la campagne</h3>
+                <p id="campaignInfos-name">{{ campaign.name }}</p>
+                <h3>Nom d'expéditeur</h3>
+                <p id="campaignInfos-sendername">{{ campaign.sender }}</p>
+                <h3>Objet</h3>
+                <p id="campaignInfos-subject">{{ campaign.subject }}</p>
+                {% if campaign_date != 1 and campaign_date != 0 %}
+                    <h3>Date d'envoi prévue</h3>
+                    <p id="campaignInfos-senddate">{{ campaign_date }}</p>
+                    {% endif %}
+                <h3>Liste des contacts</h3>
+                <div class="contactsList__container">
+                    <ul class="contactsList">
+                        {% for contact in contacts %}
+                        <li>{{ contact }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% from "_formhelpers.html" import render_field %}
+            <form method="post" class="confirmEmailForm" name="confirmEmailForm">
+                {% if campaign_date == 1 %}
+                    <input type="submit" value="Envoyer">
+                {% else %}
+                    <input type="submit" value="Valider">
+                {% endif %}
+            </form>
+        </div>
+    </div>
+    <div class="footer"></div>
+    
+    <!-- Load jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- Load custom JS -->
+    <script src="{{ url_for('static', filename='js/emailsender.js') }}"></script>
+</body>
+</html>
