@@ -18,9 +18,10 @@ class Campaign(db.Model):
     sender = db.Column(db.String(255), unique=False, nullable=False)
     subject = db.Column(db.String(255), unique=False, nullable=True)
     content = db.Column(db.Text, unique=False, nullable=True)
-    a_envoyer = db.Column(db.Integer, unique=False, nullable=False)
+    date_envoi = db.Column(db.Integer, unique=False, nullable=False)
     filters = db.Column(db.String(255), unique=False, nullable=True)
     contacts = db.Column(db.Text, unique=False, nullable=True)
+    confirmed = db.Column(db.Integer, unique=False, nullable=True)
     sent = db.Column(db.Integer, unique=False, nullable=False)
     
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

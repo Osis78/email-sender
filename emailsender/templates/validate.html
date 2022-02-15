@@ -19,31 +19,7 @@
             <h1 class="pageTitle">Récapitulatif de la campagne</h1>
         </div>
         <div class="main">
-            <div class="campaignInfos">
-                <h3>Nom de la campagne</h3>
-                <p id="campaignInfos-name">{{ campaign.name }}</p>
-                <h3>Nom d'expéditeur</h3>
-                <p id="campaignInfos-sendername">{{ campaign.sender }}</p>
-                <h3>Objet</h3>
-                <p id="campaignInfos-subject">{{ campaign.subject }}</p>
-                <h3>Date d'envoi prévue</h3>
-                <p id="campaignInfos-senddate">{{ campaign_date }}</p>
-                <h3>Liste des contacts</h3>
-                <div class="contactsList__container">
-                    <ul class="contactsList">
-                        {% for contact in contacts %}
-                        <li>{{ contact }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-            <form method="post" class="confirmEmailForm" name="confirmEmailForm">
-                {% if campaign_date == 0 %}
-                    <input type="submit" value="Envoyer">
-                {% else %}
-                    <input type="submit" value="Valider">
-                {% endif %}
-            </form>
+            <h2>C'est bon!</h2>
         </div>
     </div>
     <div class="footer"></div>

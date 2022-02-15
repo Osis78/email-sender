@@ -25,6 +25,6 @@ class EmailForm(Form):
     ])
     filters = StringField('')
     content = StringField('', [validators.DataRequired()])
-    a_envoyer = StringField('', [
+    date_envoi = StringField('', [
         validators.Length(min=0, max=16)
     ])

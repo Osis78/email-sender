@@ -5,18 +5,19 @@ from itertools import chain, zip_longest
 
 from emailsender.models import Campaign
 
-def save_campaign(campaign_name, sender, subject, content, a_envoyer, filters, contacts, is_sent, user_id, update=False, campaign_id=None):
+def save_campaign(campaign_name, sender, subject, content, date_envoi, filters, contacts, is_sent, user_id, update=False, campaign_id=None, confirmed=0):
     if update == False:
-        campaign = Campaign(name=campaign_name, sender=sender, subject=subject, content=content, a_envoyer=a_envoyer, filters=filters, contacts=contacts, sent=is_sent, user_id=user_id)
+        campaign = Campaign(name=campaign_name, sender=sender, subject=subject, content=content, date_envoi=date_envoi, filters=filters, contacts=contacts, confirmed=confirmed, sent=is_sent, user_id=user_id)
     if update == True and campaign_id != None:
         campaign = Campaign.query.filter_by(id=campaign_id).first()
         campaign.name = campaign_name
         campaign.sender = sender
         campaign.subject = subject
         campaign.content = content
-        campaign.a_envoyer = a_envoyer
+        campaign.date_envoi = date_envoi
         campaign.filters = filters
         campaign.contacts = contacts
+        campaign.confirmed = confirmed
         campaign.sent = is_sent
     return campaign
 

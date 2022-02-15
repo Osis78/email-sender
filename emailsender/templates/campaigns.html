@@ -39,11 +39,11 @@
                     <h3>Actions</h3>
                 </div>
             </div>
-            <ul class="campaignsList">
+            <ul class="campaignsList" id="campaignsList">
                 {% for campaign in campaigns %}
-                    <li>
+                    <li id="campaign_row_{{ loop.index0 }}">
                         <div>
-                            <p>{{ campaign.id }}</p>
+                            <p id="campaign_id_{{ loop.index0 }}">{{ campaign.id }}</p>
                         </div>
                         <div>
                             <p>{{ campaign.name }}</p>
@@ -56,11 +56,11 @@
                         </div>
                         <div>
                             {% if campaign.sent == 0 %}
-                                {% if campaign.a_envoyer != 0 and campaign.a_envoyer != 1 %}
-                                    <p>Envoi prévu le: {{ campaign.a_envoyer }}</p>
+                                {% if campaign.date_envoi != 0 %}
+                                    <p>Envoi prévu le: {{ campaign.date_envoi }}</p>
                                 {% endif %}
-                                {% if campaign.a_envoyer == 0 %}
-                                    <p>Envoi non paramétré</p>
+                                {% if campaign.date_envoi == 0 %}
+                                    <p>Prête à l'envoi</p>
                                 {% endif %}
                             {% endif %}
                             {% if campaign.sent == 1 %}
@@ -68,9 +68,9 @@
                             {% endif %}
                         </div>
                         <div class="actions">
-                            <input type="button" value="Dupliquer" class="buttonInput--mod">
+                            <input type="button" value="Dupliquer" class="buttonInput--mod" id="campaign_dup_{{ loop.index0 }}">
                             {% if campaign.sent != 1 %}
-                                <input type="button" value="Accéder" class="buttonInput--mod" id="goToCampaign">
+                                <input type="button" value="Accéder" class="buttonInput--mod" id="campaign_go_{{ loop.index0 }}">
                             {% endif %}
                         </div>
                     </li>
@@ -78,5 +78,9 @@
             </ul>
         </div>
     </div>
+    <!-- Load jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- Load custom JS -->
+    <script src="{{ url_for('static', filename='js/campaigns.js') }}"></script>
 </body>
 </html>

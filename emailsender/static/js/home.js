@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
     $('#newCampaign').on('click', () => {
-        window.open('campagne');
+        window.open('campagne', '_self');
     });
 
 });

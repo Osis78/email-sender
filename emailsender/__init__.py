@@ -1,4 +1,3 @@
-import re
 import time, datetime
 
 from flask import request, session, render_template, redirect, url_for, flash
@@ -49,24 +48,27 @@ def campaign():
             update_campaign = True
             req_campaign_id = request.args.get('c')
             req_campaign = Campaign.query.filter_by(id=req_campaign_id).first()
-            req_name = req_campaign.name
-            req_sender = req_campaign.sender
-            req_subject = req_campaign.subject
-            req_filters = req_campaign.filters
-            req_content = req_campaign.content
-            if req_campaign.a_envoyer != 1:
-                campaign_date = datetime.datetime.fromtimestamp(req_campaign.a_envoyer)
-                campaign_date_format = campaign_date.strftime("%d/%m/%Y %H:%M")
-                req_aenvoyer = campaign_date_format
-            else:
-                req_aenvoyer = req_campaign.a_envoyer
-            form = EmailForm(name=req_name, sender=req_sender, subject=req_subject, filters=req_filters, content=req_content, a_envoyer=req_aenvoyer)
-            # Si id est donné, alors on va préremplir le form + au lieu d'appeler save_campaign on va appeler une fonction update_campaign
-        if request.method == 'POST' and form.validate():
+#            req_name = req_campaign.name
+#            req_sender = req_campaign.sender
+#            req_subject = req_campaign.subject
+#            req_filters = req_campaign.filters
+#            req_content = req_campaign.content
+#            if req_campaign.date_envoi != 0:
+#                campaign_date = datetime.datetime.fromtimestamp(req_campaign.date_envoi)
+#                campaign_date_format = campaign_date.strftime("%d/%m/%Y %H:%M")
+#                req_date_envoi = campaign_date_format
+#            else:
+#                req_date_envoi = ""
+            form = EmailForm(request.form, obj=req_campaign)
+        else:
             form = EmailForm(request.form)
+        if request.method == 'POST' and form.validate():
             campaign_name = form.name.data
-            send_date = form.a_envoyer.data
-            a_envoyer = int(time.mktime(datetime.datetime.strptime(send_date, "%d/%m/%Y %H:%M").timetuple())) if send_date != "" else 1
+            send_date = form.date_envoi.data
+            if send_date not in ["0",""]:
+                date_envoi = int(time.mktime(datetime.datetime.strptime(send_date, "%d/%m/%Y %H:%M").timetuple()))
+            else:
+                date_envoi = 0
             contacts_file = UPLOADS_FOLDER + 'test.csv'
             sender_email = session['email']
             password = session['password']
@@ -77,9 +79,9 @@ def campaign():
             contacts_list = send_email(contacts_file, sender_email, password, sender_name, email_subject, email_content, filters, get_only_contacts=True)
             contacts = ','.join(contacts_list)
             if update_campaign == True:
-                campaign = save_campaign(campaign_name, sender_name, email_subject, email_content, a_envoyer, filters, contacts, 0, session['user_id'], True, req_campaign_id)
+                campaign = save_campaign(campaign_name, sender_name, email_subject, email_content, date_envoi, filters, contacts, 0, session['user_id'], True, req_campaign_id)
             if update_campaign == False:
-                campaign = save_campaign(campaign_name, sender_name, email_subject, email_content, a_envoyer, filters, contacts, 0, session['user_id'])
+                campaign = save_campaign(campaign_name, sender_name, email_subject, email_content, date_envoi, filters, contacts, 0, session['user_id'])
                 db.session.add(campaign)
             db.session.commit()
             session['current_campaign'] = campaign.id
@@ -92,28 +94,49 @@ def campaign():
 def confirm():
     # Mettre en forme le template + ajouter la fonction d'envoi
     if 'user_id' in session:
-        form = EmailForm(request.form)
         campaign_id = session['current_campaign']
         current_campaign = Campaign.query.filter_by(id=campaign_id).first()
-        campaign_date = datetime.datetime.fromtimestamp(current_campaign.a_envoyer)
-        campaign_date_format = campaign_date.strftime("Le %d/%m/%Y à %H:%M")
-        req_aenvoyer = campaign_date_format
-        campaign_date = current_campaign.a_envoyer if current_campaign.a_envoyer == 1 else req_aenvoyer
+        if current_campaign.date_envoi not in ["",0]:
+            campaign_date = datetime.datetime.fromtimestamp(current_campaign.date_envoi).strftime("Le %d/%m/%Y à %H:%M")
+        else:
+            campaign_date = "A envoyer maintenant"
         contacts = current_campaign.contacts.split(",")
-        return render_template('confirm.html', form=form, campaign=current_campaign, campaign_date=campaign_date, contacts=contacts)
+        # Vérifier que la campagne se met bien à jour
+        if request.method == 'POST':
+            current_campaign.confirmed = 1
+            db.session.commit()
+            return redirect(url_for('validate'))
+        return render_template('confirm.html', campaign=current_campaign, campaign_date=campaign_date, contacts=contacts)
     else:
         return redirect(url_for('login'))
 
+@app.route('/validate', methods=['GET', 'POST'])
+def validate():
+    if 'user_id' in session:
+        return render_template('validate.html')
 
 @app.route('/campagnes')
 def campaigns():
     if 'user_id' in session:
         campaigns = Campaign.query.filter_by(user_id=session['user_id']).all()
         for campaign in campaigns:
-            if campaign.a_envoyer != 0 and campaign.a_envoyer != 1:
-                campaign_date = datetime.datetime.fromtimestamp(campaign.a_envoyer)
+            if campaign.date_envoi != 0 and campaign.date_envoi != 1:
+                campaign_date = datetime.datetime.fromtimestamp(campaign.date_envoi)
                 campaign_date_format = campaign_date.strftime("%d/%m/%Y à %H:%M")
-                campaign.a_envoyer = campaign_date_format
+                campaign.date_envoi = campaign_date_format
+        if request.args.get('c'):
+            to_dup_campaign_id = request.args.get('c')
+            to_dup_campaign = Campaign.query.filter_by(id=to_dup_campaign_id).first()
+            dup_campaign_name = to_dup_campaign.name
+            dup_send_date = to_dup_campaign.date_envoi if to_dup_campaign.date_envoi != 0 else 0
+            dup_sender_name = to_dup_campaign.sender
+            dup_email_subject = to_dup_campaign.subject
+            dup_email_content = to_dup_campaign.content
+            dup_filters = to_dup_campaign.filters
+            dup_contacts = to_dup_campaign.contacts
+            dup_campaign = save_campaign(dup_campaign_name, dup_sender_name, dup_email_subject, dup_email_content, dup_send_date, dup_filters, dup_contacts, 0, session['user_id'])
+            db.session.add(dup_campaign)
+            db.session.commit()
         return render_template('campaigns.html', campaigns=campaigns)
     else:
         return redirect(url_for('login'))

@@ -32,8 +32,8 @@
                     {{ render_field(form.sender, class="displayName") }}
                     <label for="subject">Objet du mail<span class="required_field">*</span></label>
                     {{ render_field(form.subject, class="subject") }}
-                    <label for="a_envoyer">Prévoir l'envoi</label>
-                    {{ render_field(form.a_envoyer, class="a_envoyer", id="datetimepicker", type="text") }}
+                    <label for="date_envoi">Prévoir l'envoi</label>
+                    {{ render_field(form.date_envoi, class="date_envoi", id="datetimepicker", type="text") }}
                     <div class="filtering__actions">
                         <label for="filters">Filtres</label>
                             {{ render_field(form.filters, id="filters", class="filters") }}

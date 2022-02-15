@@ -24,7 +24,6 @@ $(document).ready(function() {
         let year = date.getFullYear();
         let hours = date.getHours();
         let minutes = date.getMinutes();
-        // Will display time in 10:30 format
         let formattedTime = day + '/' + "0" + month + '/' + year + ' ' + hours + ':' + minutes;
 
         return formattedTime.toString();
@@ -48,11 +47,18 @@ $(document).ready(function() {
     let and_condition = $('#and_condition');
     let or_condition = $('#or_condition');
     let addVar = $('#addVar');
-    let a_envoyer = $('#datetimepicker');
+    let date_envoi = $('#datetimepicker');
     //let left_parenthesis = $('#left_parenthesis');
     //let right_parenthesis = $('#right_parenthesis');
 
-    //let add_var_bt = $('#add_var');
+    if (date_envoi.val().length === 10) {
+        date_envoi.val(timestamp_to_date(date_envoi.val()));
+    }
+    date_envoi.on("change", () => {
+        if (date_envoi.val().length === 10) {
+            date_envoi.val(timestamp_to_date(date_envoi.val()));
+        }
+    });
     
     //editor.css('background-color', selectedColor);
     $('#content_title').css('display', 'none');
